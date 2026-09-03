@@ -25,6 +25,82 @@ version: 0.1.0
 AppVersion: "v1.27.0"
 
 dependencies:
+  - name: alerts
+    version: 0.1.1
+    repository: "file://charts/alerts"
+    condition: alerts.enabled
+  - name: api
+    version: 0.1.1
+    repository: "file://charts/api"
+    condition: api.enabled
+  - name: assets
+    version: 0.1.1
+    repository: "file://charts/assets"
+    condition: assets.enabled
+  - name: assist
+    version: 0.1.1
+    repository: "file://charts/assist"
+    condition: assist.enabled
+  - name: assist-stats
+    version: 0.1.7
+    repository: "file://charts/assist-stats"
+    condition: global.ee-components.enabled
+  - name: canvases
+    version: 0.1.1
+    repository: "file://charts/canvases"
+    condition: canvases.enabled
+  - name: chalice
+    version: 0.1.7
+    repository: "file://charts/chalice"
+    condition: chalice.enabled
+  - name: db
+    version: 0.1.1
+    repository: "file://charts/db"
+    condition: db.enabled
+  - name: ender
+    version: 0.1.1
+    repository: "file://charts/ender"
+    condition: ender.enabled
+  - name: frontend
+    version: 0.1.10
+    repository: "file://charts/frontend"
+    condition: frontend.enabled
+  - name: heuristics
+    version: 0.1.1
+    repository: "file://charts/heuristics"
+    condition: heuristics.enabled
+  - name: http
+    version: 0.1.1
+    repository: "file://charts/http"
+    condition: http.enabled
+  - name: images
+    version: 0.1.1
+    repository: "file://charts/images"
+    condition: images.enabled
+  - name: integrations
+    version: 0.1.1
+    repository: "file://charts/integrations"
+    condition: integrations.enabled
+  - name: sink
+    version: 0.1.1
+    repository: "file://charts/sink"
+    condition: sink.enabled
+  - name: sourcemapreader
+    version: 0.1.1
+    repository: "file://charts/sourcemapreader"
+    condition: sourcemapreader.enabled
+  - name: spot
+    version: 0.1.1
+    repository: "file://charts/spot"
+    condition: spot.enabled
+  - name: storage
+    version: 0.1.1
+    repository: "file://charts/storage"
+    condition: storage.enabled
+  - name: utilities
+    version: 0.1.0
+    repository: "file://charts/utilities"
+    condition: utilities.enabled
   - name: ingress-nginx
     version: 2.4.1
     repository: "file://charts/ingress-nginx"
