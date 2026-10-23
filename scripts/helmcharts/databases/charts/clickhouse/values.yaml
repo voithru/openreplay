@@ -97,6 +97,7 @@ tolerations: []
 
 affinity: {}
 storageSize: 100Gi
+storageClassName: ""
 
 # Kernel / OS tuning (optional, disabled by default)
 # These require privileged initContainers and may need cluster-level configuration.
