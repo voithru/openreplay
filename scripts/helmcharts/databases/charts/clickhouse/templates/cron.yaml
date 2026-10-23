@@ -13,6 +13,9 @@ metadata:
     {{- include "clickhouse.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.backupCronJob.schedule | quote }}
+  {{- if .Values.backupCronJob.timeZone }}
+  timeZone: {{ .Values.backupCronJob.timeZone | quote }}
+  {{- end }}
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
