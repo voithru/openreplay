@@ -141,6 +141,9 @@ spec:
       name: default-chi-openreplay-clickhouse-replicated-0-0-0
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.storageClassName }}
+      storageClassName: {{ .Values.storageClassName | quote }}
+      {{- end }}
       resources:
         requests:
           storage: {{ .Values.storageSize }}
