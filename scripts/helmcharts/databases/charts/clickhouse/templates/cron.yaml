@@ -12,7 +12,8 @@ metadata:
   labels:
     {{- include "clickhouse.labels" . | nindent 4 }}
 spec:
-  schedule: "5 11 * * */4"
+  schedule: {{ .Values.backupCronJob.schedule | quote }}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       backoffLimit: 0 # Don't restart the failed jobs
@@ -34,17 +35,24 @@ spec:
               - -c
             args:
               - |
-                set -x
+                set -eu
                 BACKUP_NAME=openreplay_clickhouse_backup$(date -u +%Y-%m-%dT%H-%M-%S)
-                curl -XPOST http://clickhouse-openreplay-clickhouse:7171/backup/create?name=$BACKUP_NAME
-                sleep 10
-                # Upload backup
-                # curl -XPOST http://clickhouse-openreplay-clickhouse:7171/backup/upload/$BACKUP_NAME
-
-                # Get the backup status
-                echo "Backup Status:"
-                curl http://clickhouse-openreplay-clickhouse:7171/backup/status?name=$BACKUP_NAME
-                # List active backups
-                echo "Active backup in machine"
-                curl http://clickhouse-openreplay-clickhouse:7171/backup/list
+                {{ if .Values.backupCronJob.remote }}
+                OPERATION=create_remote
+                {{ else }}
+                OPERATION=create
+                {{ end }}
+                curl -fsS -XPOST "http://clickhouse-openreplay-clickhouse:7171/backup/$OPERATION?name=$BACKUP_NAME"
+                ATTEMPT=0
+                while [ "$ATTEMPT" -lt 120 ]; do
+                  sleep 15
+                  STATUS=$(curl -fsS "http://clickhouse-openreplay-clickhouse:7171/backup/status?name=$BACKUP_NAME")
+                  case "$STATUS" in
+                    *'"status":"success"'*) echo "$STATUS"; exit 0 ;;
+                    *'"status":"error"'*) echo "$STATUS"; exit 1 ;;
+                  esac
+                  ATTEMPT=$((ATTEMPT + 1))
+                done
+                echo "ClickHouse backup timed out: $BACKUP_NAME" >&2
+                exit 1
           restartPolicy: Never
